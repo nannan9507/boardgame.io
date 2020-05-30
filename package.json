@@ -7,15 +7,17 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "boardgame.io": "^0.39.11",
+    "customize-cra": "^1.0.0",
     "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-scripts-rewired start",
+    "build": "react-scripts-rewired build",
+    "test": "react-scripts-rewired test",
+    "eject": "react-scripts-rewired eject"
   },
   "eslintConfig": {
     "extends": "react-app"
