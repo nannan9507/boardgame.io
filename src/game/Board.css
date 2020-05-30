@@ -1,0 +1,23 @@
+.sg-main__board {
+  flex: 1;
+}
+
+.sg-main__hand {
+  display: flex;
+  align-items: center;
+  height: 180px;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid #DEDEDE;
+}
+
+.avatar {
+  margin: 0 20px;
+  width: 150px;
+  height: 150px;
+  line-height: 150px;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid #dedede;
+  border-radius: 50%;
+}

@@ -1,14 +1,11 @@
 import React from 'react';
-import Client from './Client'
+import Client from './game/Client'
 import './App.css';
-
-console.log(Client)
 
 function App() {
   return (
     <div className="App">
-      hello world
-      <Client gameId='1' playerId='2'></Client>
+      <Client gameID='1' playerID='1'></Client>
     </div>
   );
 }
