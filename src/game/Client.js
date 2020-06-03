@@ -1,36 +1,24 @@
-import React from 'react'
 import { Client } from 'boardgame.io/react'
-// import Board from './Board'
-// import Avalon from './games/Avalon'
+import Board from './games/Story/Board'
+import Story from './games/Story'
 
-// const App = Client({ game: Avalon, board: Board })
-const game = {
-  name: 'shuffle',
-
-  setup: () => ({
-    deck: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
-  }),
-
-  moves: {
-    shuffle: (G, ctx) => ({ ...G, deck: ctx.random.Shuffle(G.deck) }),
-    rollDie: (G, ctx, value) => ({ ...G, dice: ctx.random.Die(value) }),
-    rollD6: (G, ctx) => ({ ...G, dice: ctx.random.D6() }),
-  },
-}
-
-class Board extends React.Component {
-  render() {
-    return (
-      // eslint-disable-next-line
-      <div>hello</div>
-    )
-  }
-}
-
-const App = Client({
-  game,
+const gameConf = {
+  game: Story,
   board: Board,
-  debug: false
-})
+}
+
+let u = navigator.userAgent
+let isMobile = !!u.match(/AppleWebKit.*Mobile.*/)
+gameConf.debug = !isMobile
+
+if (process.env.NODE_ENV === 'development') {
+  window.onresize = () => {
+    window.location.reload()
+  }
+} else {
+  gameConf.debug = false
+}
+
+const App = Client(gameConf)
 
 export default App

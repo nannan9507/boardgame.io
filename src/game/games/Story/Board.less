@@ -1,0 +1,57 @@
+.sg-main {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sg-main__board {
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+
+.sg-main__hand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid #DEDEDE;
+}
+
+.cards {
+  position: relative;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  height: 80px;
+  width: 60px;
+  border: 1px solid #EEE;
+  text-align: center;
+  font-size: 12px;
+  background: #FFF;
+  & + .card {
+    margin-left: -20px;
+  }
+}
+
+.choiced-card {
+  background: blueviolet!important;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 30px;
+}

@@ -1,12 +1,12 @@
 import React from 'react'
-import './Board.css'
+import './Board.less'
 
 class Board extends React.Component {
   render() {
     return <div className={['sg-main']}>
       <div className={['sg-main__board']}></div>
       <div className={['sg-main__hand']}>
-        <div className={['avatar']}></div>
+        <div className={['avatar']}>魔女</div>
       </div>
     </div>
   }
