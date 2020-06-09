@@ -12,19 +12,63 @@
 .sg-main__hand {
   display: flex;
   align-items: center;
-  height: 100px;
   width: 100%;
   box-sizing: border-box;
-  border-top: 1px solid #DEDEDE;
 }
 
 .avatar {
-  margin: 0 20px;
-  width: 80px;
-  height: 80px;
-  line-height: 80px;
+  margin: 0 5px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
-  font-size: 12px;
+  font-size: 4px;
   border: 1px solid #dedede;
   border-radius: 50%;
+}
+
+.introduce {
+
+}
+
+.common-board {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 100%;
+  flex-wrap: wrap;
+  .line {
+    display: flex;
+    margin-top: 20px;
+    width: 50%;
+    height: 20px;
+    .number {
+      padding-left: 5px;
+      line-height: 20px;
+    }
+    .little-avatar {
+      flex-shrink: 0;
+      margin-left: 5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 0.5px solid #DEDEDE;
+      box-sizing: border-box;
+    }
+    .content {
+      padding-left: 5px;
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+  }
+}
+
+.vote {
+  height: 30px;
+  .tips {
+    font-weight: bold;
+    text-align: center;
+    font-size: 4px;
+  }
 }

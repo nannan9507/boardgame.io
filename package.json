@@ -16,11 +16,16 @@
     "customize-cra": "^1.0.0",
     "less": "^3.11.1",
     "less-loader": "^6.1.0",
+    "lib-flexible": "^0.3.2",
+    "postcss-px-to-viewport": "^1.1.1",
     "postcss-px2rem-exclude": "^0.0.6",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-hammerjs": "^1.0.1",
+    "react-scripts": "3.4.1",
+    "react-touch": "^0.4.4",
+    "superagent": "^5.2.2"
   },
   "scripts": {
     "start": "react-app-rewired start",

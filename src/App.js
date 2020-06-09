@@ -1,11 +1,15 @@
+import 'lib-flexible'
 import React from 'react'
-import Client from './game/Client'
+import Avalon from './game/games/Avalon/multiplayer'
+// import Client from './game/Client'
+// import TicTacToe from './game/games/TicTacToe/multiplayer'
 import './App.css'
 
 function App() {
   return (
     <div className="App">
-      <Client gameID='1' playerID='1'></Client>
+      <Avalon></Avalon>
+      {/* <TicTacToe></TicTacToe> */}
     </div>
   )
 }
