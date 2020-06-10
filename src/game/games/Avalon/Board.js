@@ -1,39 +1,56 @@
 import React from 'react'
-import { Witch } from './cards'
+import { CheckCircleOutlined } from '@ant-design/icons'
 import './Board.less'
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      choice: []
+    }
+  }
+
+  chioceRole(role) {
+    const list = this.state.choice
+    list.push(role.index)
+    this.setState({
+      choice: list
+    })
+  }
+
   render() {
+    const roles = this.props.G.roles
     let lines = []
-    for (let i = 0; i < this.props.ctx.numPlayers; i++) {
+    for (let role of roles) {
       lines.push(
-        <div key={i} className="line">
-          <div className="number">{i + 1}</div>
-          <div className="little-avatar">
+        <div key={role.index} className="line">
+          <div className="little-avatar" onClick={() => this.chioceRole(role)}>
           </div>
-          <div className="content"></div>
+          <CheckCircleOutlined />
         </div>
       )
     }
+
     const commonBoard = <div className="common-board">
-      { lines }
+      {lines}
     </div>
 
-    const my = <div className="my">
-      <div className={['sg-main__hand']}>
-        <div className={['avatar']}>{Witch.name}</div>
-        <div className={['introduce']}>{Witch.introduce}</div>
-      </div>
-    </div>
+    // const my = <div className="my">
+    //   <div className={['sg-main__hand']}>
+    //     <div className={['avatar']}>{Witch.name}</div>
+    //     <div className={['introduce']}>{Witch.introduce}</div>
+    //   </div>
+    // </div>
 
     const voteBoard = <div className="vote">
-      <div className="tips">请选择【3】名玩家头像</div>
+      <div className="tips">请选择【{3 - this.state.choice.length}】名玩家头像</div>
     </div>
 
     return <div>
       {commonBoard}
       {voteBoard}
-      {my}
+      {/* {my} */}
     </div>
   }
 }

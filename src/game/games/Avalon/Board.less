@@ -38,10 +38,27 @@
   width: 100%;
   flex-wrap: wrap;
   .line {
+    position: relative;
     display: flex;
     margin-top: 20px;
     width: 50%;
     height: 20px;
+    .anticon {
+      position: absolute;
+      left: 0;
+    }
+    &:nth-child(n+6) {
+      margin-right: 5px;
+      justify-content: flex-end;
+      .anticon {
+        right: 0;
+        left: auto;
+      }
+      .little-avatar {
+        margin-left: 0;
+        margin-right: 5px;
+      }
+    }
     .number {
       padding-left: 5px;
       line-height: 20px;
@@ -65,6 +82,7 @@
 }
 
 .vote {
+  margin-top: 5px;
   height: 30px;
   .tips {
     font-weight: bold;

@@ -1,4 +1,5 @@
 import { TurnOrder } from 'boardgame.io/core'
+import {Witch} from './cards'
 
 const isOver = (missions) => {
   const successTimes = missions.filter(mission => {
@@ -21,30 +22,30 @@ const isOver = (missions) => {
 }
 
 const gamer = {
-  6: [
-    { number: 2, status: 'await' },
-    { number: 3, status: 'await' },
-    { number: 3, status: 'await' },
-    { number: 4, status: 'await' },
-    { number: 4, status: 'await' },
-  ]
+  6: {
+    recommend: [
+      Witch
+    ],
+    missions: [
+      { number: 2, status: 'await' },
+      { number: 3, status: 'await' },
+      { number: 3, status: 'await' },
+      { number: 4, status: 'await' },
+      { number: 4, status: 'await' },
+    ]
+  }
 }
 
 const Avalon = {
   name: 'Avalon',
 
-  // roles => current
-
   setup: (G) => ({
-    missions: gamer[G.numPlayers],
+    missions: gamer[G.numPlayers].missions,
     roles: new Array(G.numPlayers).fill({}),
-    team: {
-      goods: [],
-      bads: []
-    },
-    cars: [],
+    // 当前任务轮数
     currentMission: 0,
-    miss: 0
+    // 任务否决次数
+    veto: 0
   }),
 
   turn: {
@@ -55,7 +56,7 @@ const Avalon = {
     pick: {
       start: true,
       endIf: (G, ctx) => {
-        console.log(ctx)
+        // console.log(ctx)
         // (G.cars.length === G.missions[G.currentMission].number)
       },
       next: 'talk',
@@ -65,9 +66,14 @@ const Avalon = {
     },
     vote: {
       endIf: (G, ctx) => {
-      }
+      },
+      // 如果投票成立，去mission，不成立则结束本轮到pick
+      next: ''
     },
-    mission: {}
+    mission: {
+      endIf: (G, ctx) => {
+      }
+    }
   },
 
   moves: {
