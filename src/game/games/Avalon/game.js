@@ -39,14 +39,21 @@ const gamer = {
 const Avalon = {
   name: 'Avalon',
 
-  setup: (G) => ({
-    missions: gamer[G.numPlayers].missions,
-    roles: new Array(G.numPlayers).fill({}),
-    // 当前任务轮数
-    currentMission: 0,
-    // 任务否决次数
-    veto: 0
-  }),
+  setup: (G) => {
+    let roles = []
+    for (let i = 0; i < G.numPlayers; i++) {
+      roles.push({ index: i + 1, active: false })
+    }
+
+    return {
+      missions: gamer[G.numPlayers].missions,
+      roles,
+      // 当前任务轮数
+      currentMission: 0,
+      // 任务否决次数
+      veto: 0
+    }
+  },
 
   turn: {
     order: TurnOrder.ONCE,
@@ -55,14 +62,11 @@ const Avalon = {
   phases: {
     pick: {
       start: true,
-      endIf: (G, ctx) => {
-        // console.log(ctx)
-        // (G.cars.length === G.missions[G.currentMission].number)
-      },
       next: 'talk',
+      endIf: (G, ctx) => ctx.turn === 2
     },
     talk: {
-      // endIf: (G, ctx) => true,
+      next: 'vote'
     },
     vote: {
       endIf: (G, ctx) => {
@@ -71,12 +75,19 @@ const Avalon = {
       next: ''
     },
     mission: {
-      endIf: (G, ctx) => {
-      }
+      // endIf: (G, ctx) => {
+      // }
+      next: 'pick'
     }
   },
 
   moves: {
+    endPick(G, ctx) {
+      this.props.events.endPhase()
+    },
+
+    endTalk() {
+    }
   },
 
   endIf: (G, ctx) => {

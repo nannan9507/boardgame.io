@@ -1,6 +1,7 @@
 import React from 'react';
 import { Client } from 'boardgame.io/react';
 import { setDebug } from '../../../utils'
+import { Local } from 'boardgame.io/multiplayer';
 // import { SocketIO } from 'boardgame.io/multiplayer';
 import Game from './game';
 import Board from './board';
@@ -10,7 +11,8 @@ import Board from './board';
 const App = Client(setDebug({
   game: Game,
   board: Board,
-  numPlayers: 6
+  numPlayers: 6,
+  multiplayer: Local()
 }));
 
 class GameClient extends React.Component {
@@ -23,7 +25,9 @@ class GameClient extends React.Component {
   render() {
     return (
       <div>
-        <App></App>
+        <App playerID="0"></App>
+        {/* <App playerID="1"></App>
+        <App playerID="2"></App> */}
       </div>
     );
   }

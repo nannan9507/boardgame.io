@@ -4,7 +4,7 @@ const { override, addPostcssPlugins, fixBabelImports, addLessLoader } = require(
 module.exports = override(
   addLessLoader(),
   addPostcssPlugins([require("postcss-px2rem-exclude")({
-    remUnit: 16,
+    remUnit: 75,
     propList: ['*'],
     exclude: ''
   })]),
