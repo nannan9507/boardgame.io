@@ -26,8 +26,8 @@ class GameClient extends React.Component {
     return (
       <div>
         <App playerID="0"></App>
-        {/* <App playerID="1"></App>
-        <App playerID="2"></App> */}
+        <App playerID="1"></App>
+        <App playerID="2"></App>
       </div>
     );
   }

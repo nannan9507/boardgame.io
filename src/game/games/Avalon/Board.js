@@ -12,7 +12,7 @@ class Board extends React.Component {
     }
   }
 
-  chioceRole(role) {
+  choiceUser(role) {
     const currentMission = this.props.G.currentMission
 
     const index = this.state.choice.findIndex(_role => _role.index === role.index)
@@ -31,33 +31,25 @@ class Board extends React.Component {
     })
   }
 
-  endPick() {
-    this.props.events.endPhase()
-  }
+  // resetChoice() {
+  //   this.state.choice.forEach(role => {
+  //     role.active = false
+  //   })
 
-  endTalk() {
-  }
-
-  resetChoice() {
-    this.state.choice.forEach(role => {
-      role.active = false
-    })
-
-    this.setState({
-      choice: []
-    })
-  }
+  //   this.setState({
+  //     choice: []
+  //   })
+  // }
 
   render() {
-    console.log(this.props)
-    const roles = this.props.G.roles
+    const users = this.props.G.users
     let lines = []
-    roles.forEach((role, index) => {
+    users.forEach((user, index) => {
       lines.push(
         <div key={index} className="line">
-          <div className="little-avatar" onClick={() => this.chioceRole(role)}>
+          <div className="little-avatar" onClick={() => this.choiceUser(user)}>
           </div>
-          { role.active && <CheckCircleOutlined /> }
+          { user.active && <CheckCircleOutlined /> }
         </div>
       )
     })
@@ -76,27 +68,28 @@ class Board extends React.Component {
     const currentMission = this.props.G.currentMission
     const count = this.props.G.missions[currentMission].number - this.state.choice.length
     const isPick = this.props.ctx.phase === 'pick'
-    const isTalk = this.props.ctx.phase === 'talk'
+    // const isTalk = this.props.ctx.phase === 'talk'
 
     const voteBoard = <div className="vote">
       {
         isPick && count > 0 ? <div className="tips">请选择【{this.props.G.missions[currentMission].number - this.state.choice.length}】名玩家头像</div>
-        : <div className="center"><Button onClick={() => this.endPick()} className="btn" size="small" type="primary">组队</Button></div>
+        : <div className="center"><Button onClick={() => this.props.moves.endPick(this.state.choice)} className="btn" size="small" type="primary">组队</Button></div>
       }
     </div>
 
-    const talkBoard = <div className="vote">
-    {
-      isTalk && <div className="tips">
-        <Button onClick={() => this.endTalk()} className="btn" size="small" type="primary">组队</Button>
-      </div>
-    }
-    </div>
+    // 用微信语音，所以可以自行控制，如果用系统语音则可以未来打开
+    // const talkBoard = <div className="vote">
+    // {
+    //   isTalk && <div className="tips">
+    //     <div className="center"><Button onClick={() => this.props.moves.endTalk()} className="btn" size="small" type="primary">结束发言</Button></div>
+    //   </div>
+    // }
+    // </div>
 
     return <div>
       {commonBoard}
-      {voteBoard}
-      {talkBoard}
+      { isPick && voteBoard }
+      {/* { isTalk && talkBoard} */}
       {/* {my} */}
     </div>
   }

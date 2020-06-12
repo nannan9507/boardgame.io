@@ -30,7 +30,8 @@ const gamer = {
       { number: 2, status: 'await' },
       { number: 3, status: 'await' },
       { number: 3, status: 'await' },
-      { number: 4, status: 'await' },
+      // safe 保护轮，需要两张反对票
+      { number: 4, status: 'await', safe: true },
       { number: 4, status: 'await' },
     ]
   }
@@ -40,14 +41,14 @@ const Avalon = {
   name: 'Avalon',
 
   setup: (G) => {
-    let roles = []
+    let users = []
     for (let i = 0; i < G.numPlayers; i++) {
-      roles.push({ index: i + 1, active: false })
+      users.push({ index: i, active: false, role: {} })
     }
 
     return {
       missions: gamer[G.numPlayers].missions,
-      roles,
+      users,
       // 当前任务轮数
       currentMission: 0,
       // 任务否决次数
@@ -62,17 +63,21 @@ const Avalon = {
   phases: {
     pick: {
       start: true,
-      next: 'talk',
-      endIf: (G, ctx) => ctx.turn === 2
+      endIf: (G, ctx) => {
+        const list = G.users.filter(user => user.active === true)
+        if (list.length === G.missions[G.currentMission].number) {
+          return { next: 'talk' }
+        }
+      }
     },
     talk: {
       next: 'vote'
     },
     vote: {
-      endIf: (G, ctx) => {
-      },
       // 如果投票成立，去mission，不成立则结束本轮到pick
-      next: ''
+      endIf: (G, ctx) => {
+        // return { next: G.condition ? 'phaseB' : 'phaseC' }
+      },
     },
     mission: {
       // endIf: (G, ctx) => {
@@ -82,11 +87,17 @@ const Avalon = {
   },
 
   moves: {
-    endPick(G, ctx) {
-      this.props.events.endPhase()
+    endPick(G, ctx, list) {
+      list.forEach(item => {
+        G.users[item.index].active = true
+      })
     },
 
     endTalk() {
+    },
+
+    resetTurn() {
+
     }
   },
 
