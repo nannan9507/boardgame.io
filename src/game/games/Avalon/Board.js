@@ -13,6 +13,8 @@ class Board extends React.Component {
   }
 
   choiceUser(role) {
+    // 如果是激活的棋盘则取消
+    if (!this.props.isActive) return
     const currentMission = this.props.G.currentMission
 
     const index = this.state.choice.findIndex(_role => _role.index === role.index)
