@@ -50,6 +50,7 @@ const Avalon = {
       missions: gamer[G.numPlayers].missions,
       talks: [],
       users,
+      currentStage: 'talk',
       // 当前任务轮数
       currentMission: 0,
       // 任务否决次数
@@ -63,15 +64,17 @@ const Avalon = {
 
   phases: {
     pick: {
-      start: true,
+      // start: true,
       endIf: (G, ctx) => {
         const list = G.users.filter(user => user.active === true)
         if (list.length === G.missions[G.currentMission].number) {
+          G.currentStage = 'talk'
           return { next: 'talk' }
         }
       }
     },
     talk: {
+      start: true,
       endIf: (G, ctx) => {
         if (G.talks.length === G.users.length) {
           return { next: 'vote' }
@@ -98,8 +101,8 @@ const Avalon = {
       })
     },
 
-    endTalk() {
-      G.talks.push({})
+    endTalk(G, ctx, id) {
+      G.talks.push(id)
     },
 
     goMission(G, ctx) {

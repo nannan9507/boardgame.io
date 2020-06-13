@@ -31,6 +31,12 @@ class GameClient extends React.Component {
         <App playerID="1"></App>
         <p>---------------------------</p>
         <App playerID="2"></App>
+        <p>---------------------------</p>
+        <App playerID="3"></App>
+        <p>---------------------------</p>
+        <App playerID="4"></App>
+        <p>---------------------------</p>
+        <App playerID="5"></App>
       </div>
     )
   }

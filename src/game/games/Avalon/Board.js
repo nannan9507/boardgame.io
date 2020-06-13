@@ -29,8 +29,18 @@ class Board extends React.Component {
     role.active = !role.active
 
     this.setState({
-      choice: this.state.choice
+      choice: this.state.choice,
+      userInfo: {},
     })
+  }
+
+  getStage(stage) {
+    switch (stage) {
+      case 'pick':
+        return '选择阶段'
+      case 'talk':
+        return '圆桌会议'
+    }
   }
 
   // resetChoice() {
@@ -58,6 +68,7 @@ class Board extends React.Component {
 
     const commonBoard = <div className="common-board">
       {lines}
+      <div className="center">{ this.getStage(this.props.G.currentStage) }</div>
     </div>
 
     // const my = <div className="my">
@@ -70,7 +81,7 @@ class Board extends React.Component {
     const currentMission = this.props.G.currentMission
     const count = this.props.G.missions[currentMission].number - this.state.choice.length
     const isPick = this.props.ctx.phase === 'pick'
-    // const isTalk = this.props.ctx.phase === 'talk'
+    const isTalk = this.props.ctx.phase === 'talk'
 
     const voteBoard = <div className="vote">
       {
@@ -80,18 +91,16 @@ class Board extends React.Component {
     </div>
 
     // 用微信语音，所以可以自行控制，如果用系统语音则可以未来打开
-    // const talkBoard = <div className="vote">
-    // {
-    //   isTalk && <div className="tips">
-    //     <div className="center"><Button onClick={() => this.props.moves.endTalk()} className="btn" size="small" type="primary">结束发言</Button></div>
-    //   </div>
-    // }
-    // </div>
+    const talkBoard = <div className="vote">
+      <div className="tips">
+        <div className="center"><Button onClick={() => this.props.moves.endTalk(this.props.playerID)} className="btn" size="small" type="primary">结束发言</Button></div>
+      </div>
+    </div>
 
     return <div>
       {commonBoard}
       { this.props.isActive && isPick && voteBoard }
-      {/* { isTalk && talkBoard} */}
+      { isTalk && this.props.G.talks.indexOf(this.props.playerID) === -1 && talkBoard }
       {/* {my} */}
     </div>
   }
