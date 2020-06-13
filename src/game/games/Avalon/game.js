@@ -48,11 +48,12 @@ const Avalon = {
 
     return {
       missions: gamer[G.numPlayers].missions,
+      talks: [],
       users,
       // 当前任务轮数
       currentMission: 0,
       // 任务否决次数
-      veto: 0
+      veto: 0,
     }
   },
 
@@ -71,7 +72,11 @@ const Avalon = {
       }
     },
     talk: {
-      next: 'vote'
+      endIf: (G, ctx) => {
+        if (G.talks.length === G.users.length) {
+          return { next: 'vote' }
+        }
+      }
     },
     vote: {
       // 如果投票成立，去mission，不成立则结束本轮到pick
@@ -94,6 +99,7 @@ const Avalon = {
     },
 
     endTalk() {
+      G.talks.push({})
     },
 
     goMission(G, ctx) {

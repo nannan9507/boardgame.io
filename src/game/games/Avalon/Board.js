@@ -90,7 +90,7 @@ class Board extends React.Component {
 
     return <div>
       {commonBoard}
-      { isPick && voteBoard }
+      { this.props.isActive && isPick && voteBoard }
       {/* { isTalk && talkBoard} */}
       {/* {my} */}
     </div>
