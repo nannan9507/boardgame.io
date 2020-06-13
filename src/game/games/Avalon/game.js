@@ -96,6 +96,10 @@ const Avalon = {
     endTalk() {
     },
 
+    goMission(G, ctx) {
+      G.vote = 0
+    },
+
     resetTurn() {
 
     }
