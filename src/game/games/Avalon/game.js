@@ -27,12 +27,12 @@ const gamer = {
       Witch
     ],
     missions: [
-      { number: 2, status: 'await' },
-      { number: 3, status: 'await' },
-      { number: 3, status: 'await' },
+      { number: 2, status: 'await', result: [] },
+      { number: 3, status: 'await', result: [] },
+      { number: 3, status: 'await', result: [] },
       // safe 保护轮，需要两张反对票
-      { number: 4, status: 'await', safe: true },
-      { number: 4, status: 'await' },
+      { number: 4, status: 'await', safe: true, result: [] },
+      { number: 4, status: 'await', result: [] },
     ]
   }
 }
@@ -43,6 +43,10 @@ function endTalk(G, ctx, id) {
 
 function voteTo(G, ctx, info) {
   G.votes.push(info)
+}
+
+function missionTo(G, ctx, result) {
+  G.missions[G.currentMission].result.push(result)
 }
 
 const Avalon = {
@@ -78,7 +82,10 @@ const Avalon = {
         moves: { endTalk }
       },
       vote: {
-        move: { voteTo }
+        moves: { voteTo }
+      },
+      mission: {
+        moves: { missionTo }
       }
     }
   },
@@ -108,7 +115,6 @@ const Avalon = {
       }
     },
     vote: {
-      start: true,
       onBegin: (G, ctx) => {
         G.currentStage = 'vote'
         ctx.events.setActivePlayers({ all: 'vote', moveLimit: 1 })
@@ -117,13 +123,37 @@ const Avalon = {
       endIf: (G, ctx) => {
         if (G.votes.length === G.users.length) {
           const result = G.votes.filter(vote => vote.result === 'agree')
-          return { next: result.length > G.users.length / 2 ? 'mission' : 'pick' }
+          if (result.length > G.users.length / 2) {
+            return { next: 'mission' }
+          }
+
+          G.users.forEach(user => {
+            user.active = false
+          })
+
+          return { next: 'pick' }
         }
       },
     },
     mission: {
-      // endIf: (G, ctx) => {
-      // }
+      start: true,
+      onBegin: (G, ctx) => {
+        G.currentStage = 'mission'
+        const value = {}
+        G.users.forEach(user => {
+          if (user.active) {
+            value[user.index] = 'mission'
+          }
+        })
+        ctx.events.setActivePlayers({ value, moveLimit: 1 })
+      },
+      endIf: (G, ctx) => {
+        const currentMission = G.missions[G.currentMission]
+        if (currentMission.number === currentMission.result.length) {
+          // if (currentMission)
+          // console.log('揭示结果')
+        }
+      },
       next: 'pick'
     }
   },
