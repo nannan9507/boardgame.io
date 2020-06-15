@@ -13,8 +13,8 @@ class Board extends React.Component {
   }
 
   choiceUser(role) {
-    // 如果是激活的棋盘则取消
-    if (!this.props.isActive) return
+    // 如果不是激活的棋盘则取消
+    if (!this.props.isActive || !(this.props.G.currentStage === 'pick')) return
     const currentMission = this.props.G.currentMission
 
     const index = this.state.choice.findIndex(_role => _role.index === role.index)
@@ -37,10 +37,26 @@ class Board extends React.Component {
   getStage(stage) {
     switch (stage) {
       case 'pick':
-        return '选择阶段'
+        this.setState({
+          choice: []
+        })
+        return '选择队伍'
       case 'talk':
         return '圆桌会议'
+      case 'vote':
+        return '投票抉择'
+      case 'mission':
+        return '执行任务'
+      default:
+        return ''
     }
+  }
+
+  vote(result) {
+    this.props.moves.voteTo({
+      index: this.props.playerID,
+      result
+    })
   }
 
   // resetChoice() {
@@ -61,14 +77,14 @@ class Board extends React.Component {
         <div key={index} className="line">
           <div className="little-avatar" onClick={() => this.choiceUser(user)}>
           </div>
-          { user.active && <CheckCircleOutlined /> }
+          {user.active && <CheckCircleOutlined />}
         </div>
       )
     })
 
     const commonBoard = <div className="common-board">
       {lines}
-      <div className="center">{ this.getStage(this.props.G.currentStage) }</div>
+      <div className="center">{this.getStage(this.props.G.currentStage)}</div>
     </div>
 
     // const my = <div className="my">
@@ -82,11 +98,12 @@ class Board extends React.Component {
     const count = this.props.G.missions[currentMission].number - this.state.choice.length
     const isPick = this.props.ctx.phase === 'pick'
     const isTalk = this.props.ctx.phase === 'talk'
+    const isVote = this.props.ctx.phase === 'vote'
 
-    const voteBoard = <div className="vote">
+    const pickBoard = <div className="vote">
       {
         isPick && count > 0 ? <div className="tips">请选择【{this.props.G.missions[currentMission].number - this.state.choice.length}】名玩家头像</div>
-        : <div className="center"><Button onClick={() => this.props.moves.endPick(this.state.choice)} className="btn" size="small" type="primary">组队</Button></div>
+          : <div className="center"><Button onClick={() => this.props.moves.endPick(this.state.choice)} className="btn" size="small" type="primary">组队</Button></div>
       }
     </div>
 
@@ -97,10 +114,22 @@ class Board extends React.Component {
       </div>
     </div>
 
+    const voteBoard = <div className="vote">
+      <div className="tips">
+        <h3>组队</h3>
+        <p>【1】【3】【5】【6】</p>
+        <div className="center">
+          <Button className="btn" onClick={() => this.vote('disagree')} size="small" type="warning">拒绝</Button>
+          <Button className="btn" onClick={() => this.vote('agree')} size="small" type="primary">同意</Button>
+        </div>
+      </div>
+    </div>
+
     return <div>
       {commonBoard}
-      { this.props.isActive && isPick && voteBoard }
-      { isTalk && this.props.G.talks.indexOf(this.props.playerID) === -1 && talkBoard }
+      {this.props.isActive && isPick && pickBoard}
+      {isTalk && this.props.G.talks.indexOf(this.props.playerID) === -1 && talkBoard}
+      {isVote && voteBoard}
       {/* {my} */}
     </div>
   }
