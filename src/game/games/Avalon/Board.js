@@ -25,18 +25,19 @@ class Board extends React.Component {
     if (prevProps.G.currentStage !== this.props.G.currentStage) {
       const text = this.getStage(this.props.G.currentStage)
       this.setState({
-        current: text
+        current: text,
+        choice: []
       })
     }
   }
 
-  choiceUser(role) {
+  choiceUser(user) {
     // 如果不是激活的棋盘则取消
     if (!this.props.isActive || !(this.props.G.currentStage === 'pick')) return
     const currentMission = this.props.G.currentMission
 
     const index = this.state.choice.findIndex(
-      (_role) => _role.index === role.index
+      (_role) => _role.index === user.index
     )
     if (index > -1) {
       this.state.choice.splice(index, 1)
@@ -45,11 +46,13 @@ class Board extends React.Component {
         this.props.G.missions[currentMission].number ===
         this.state.choice.length
       ) {
-        return
+        return null
       }
-      this.state.choice.push(role)
+      this.state.choice.push(user)
     }
-    role.active = !role.active
+
+    // console.log(this.state.choice)
+    // user.active = !user.active
 
     this.setState({
       choice: this.state.choice,
@@ -60,9 +63,6 @@ class Board extends React.Component {
   getStage(stage) {
     switch (stage) {
       case 'pick':
-        this.setState({
-          choice: [],
-        })
         return '选择队伍'
       case 'talk':
         return '圆桌会议'
@@ -99,19 +99,10 @@ class Board extends React.Component {
     this.props.moves.missionTo(result)
   }
 
-  // resetChoice() {
-  //   this.state.choice.forEach(role => {
-  //     role.active = false
-  //   })
-
-  //   this.setState({
-  //     choice: []
-  //   })
-  // }
-
   render() {
     const users = this.props.G.users
     let lines = []
+
     users.forEach((user, index) => {
       lines.push(
         <div key={index} className="line">
@@ -133,13 +124,15 @@ class Board extends React.Component {
 
     const filter2User = () => {
       let list = []
-      const filter_list = this.props.G.users.filter(user => {
+      const filter_list = this.props.G.users.filter((user, index) => {
         if (user.active) {
-          list.push(`【${user.index}】`)
+          list.push(`【${user.index + 1}】`)
           if (user.index === Number(this.props.playerID)) {
             return user
           }
         }
+
+        return null
       })
 
       return {
@@ -206,13 +199,15 @@ class Board extends React.Component {
     )
 
     const { isCurrent, list } = filter2User()
-    const showbox = <p>{list}</p>
+    const showbox = <div>
+      {list}
+    </div>
 
     const voteBoard = (
       <div className="vote">
         <div className="tips">
           <h3>组队</h3>
-          <p>{showbox}</p>
+          {showbox}
           {this.state.isVote.status && (
             <div className="center">
               <Button

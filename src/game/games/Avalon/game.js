@@ -1,12 +1,12 @@
 import { TurnOrder } from 'boardgame.io/core'
-import {Witch} from './cards'
+import { Witch } from './cards'
 
 const isOver = (missions) => {
-  const successTimes = missions.filter(mission => {
+  const successTimes = missions.filter((mission) => {
     return mission.status === 'success'
   })
 
-  const failTimes = missions.filter(mission => {
+  const failTimes = missions.filter((mission) => {
     return mission.status === 'fail'
   })
 
@@ -23,9 +23,7 @@ const isOver = (missions) => {
 
 let gamer = {
   6: {
-    recommend: [
-      Witch
-    ],
+    recommend: [Witch],
     missions: [
       { number: 2, result: [] },
       { number: 3, result: [] },
@@ -33,8 +31,8 @@ let gamer = {
       // safe 保护轮，需要两张反对票
       { number: 4, safe: true, result: [] },
       { number: 4, result: [] },
-    ]
-  }
+    ],
+  },
 }
 
 function endTalk(G, ctx, id) {
@@ -49,6 +47,15 @@ function missionTo(G, ctx, result) {
   G.missions[G.currentMission].result.push(result)
 }
 
+function resetTurn(G) {
+  G.talks = []
+  G.votes = []
+  G.results = []
+  G.users.forEach((user) => {
+    user.active = false
+  })
+}
+
 const Avalon = {
   name: 'Avalon',
 
@@ -57,9 +64,6 @@ const Avalon = {
     for (let i = 0; i < G.numPlayers; i++) {
       users.push({ index: i, active: false, role: {} })
     }
-
-    users[0].active = true
-    users[3].active = true
 
     return {
       missions: gamer[G.numPlayers].missions,
@@ -81,29 +85,29 @@ const Avalon = {
     order: TurnOrder.DEFAULT,
     stages: {
       talking: {
-        moves: { endTalk }
+        moves: { endTalk },
       },
       vote: {
-        moves: { voteTo }
+        moves: { voteTo },
       },
       mission: {
-        moves: { missionTo }
-      }
-    }
+        moves: { missionTo },
+      },
+    },
   },
 
   phases: {
     pick: {
-      // start: true,
+      start: true,
       onBegin: (G, ctx) => {
         G.currentStage = 'pick'
       },
       endIf: (G, ctx) => {
-        const list = G.users.filter(user => user.active === true)
+        const list = G.users.filter((user) => user.active === true)
         if (list.length === G.missions[G.currentMission].number) {
           return { next: 'talk' }
         }
-      }
+      },
     },
     talk: {
       onBegin: (G, ctx) => {
@@ -114,7 +118,7 @@ const Avalon = {
         if (G.talks.length === G.users.length) {
           return { next: 'vote' }
         }
-      }
+      },
     },
     vote: {
       onBegin: (G, ctx) => {
@@ -124,25 +128,31 @@ const Avalon = {
       // 如果投票成立，去mission，不成立则结束本轮到pick
       endIf: (G, ctx) => {
         if (G.votes.length === G.users.length) {
-          const result = G.votes.filter(vote => vote.result === 'agree')
+          const result = G.votes.filter((vote) => vote.result === 'agree')
           if (result.length > G.users.length / 2) {
             return { next: 'mission' }
           }
 
-          G.users.forEach(user => {
-            user.active = false
-          })
-
           return { next: 'pick' }
         }
       },
+      onEnd(G) {
+        const result = G.votes.filter((vote) => vote.result === 'agree')
+        if (result.length <= G.users.length / 2) {
+          G.currentMission = G.currentMission + 1
+          console.log(1111)
+          console.log('===========')
+          console.log(G.currentMission)
+          console.log('===========')
+          resetTurn(G)
+        }
+      }
     },
     mission: {
-      start: true,
       onBegin: (G, ctx) => {
         G.currentStage = 'mission'
         const value = {}
-        G.users.forEach(user => {
+        G.users.forEach((user) => {
           if (user.active) {
             value[user.index] = 'mission'
           }
@@ -151,9 +161,7 @@ const Avalon = {
       },
       onEnd: (G, ctx) => {
         G.currentMission = G.currentMission + 1
-        G.talks = []
-        G.votes = []
-        G.results = []
+        resetTurn(G)
       },
       endIf: (G, ctx) => {
         let currentMission = G.missions[G.currentMission]
@@ -167,12 +175,12 @@ const Avalon = {
           return { next: 'pick' }
         }
       },
-    }
+    },
   },
 
   moves: {
     endPick(G, ctx, list) {
-      list.forEach(item => {
+      list.forEach((item) => {
         G.users[item.index].active = true
       })
     },
@@ -185,20 +193,18 @@ const Avalon = {
 
     voteTo,
 
-    resetTurn() {
-
-    }
+    resetTurn,
   },
 
   endIf: (G, ctx) => {
     if (isOver(G.missions) === 'bad') {
-      return { winner: G.team.bads };
+      return { winner: G.team.bads }
     }
 
     if (isOver(G.missions) === 'good') {
       return { winner: G.team.goods }
     }
   },
-};
+}
 
-export default Avalon;
+export default Avalon
