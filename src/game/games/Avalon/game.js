@@ -21,18 +21,18 @@ const isOver = (missions) => {
   return 'game'
 }
 
-const gamer = {
+let gamer = {
   6: {
     recommend: [
       Witch
     ],
     missions: [
-      { number: 2, status: 'await', result: [] },
-      { number: 3, status: 'await', result: [] },
-      { number: 3, status: 'await', result: [] },
+      { number: 2, result: [] },
+      { number: 3, result: [] },
+      { number: 3, result: [] },
       // safe 保护轮，需要两张反对票
-      { number: 4, status: 'await', safe: true, result: [] },
-      { number: 4, status: 'await', result: [] },
+      { number: 4, safe: true, result: [] },
+      { number: 4, result: [] },
     ]
   }
 }
@@ -71,12 +71,14 @@ const Avalon = {
       // 任务否决次数
       veto: 0,
       // 投票结果
-      votes: []
+      votes: [],
+      // 成功／失败结果
+      results: [],
     }
   },
 
   turn: {
-    order: TurnOrder.ONCE,
+    order: TurnOrder.DEFAULT,
     stages: {
       talking: {
         moves: { endTalk }
@@ -147,14 +149,24 @@ const Avalon = {
         })
         ctx.events.setActivePlayers({ value, moveLimit: 1 })
       },
+      onEnd: (G, ctx) => {
+        G.currentMission = G.currentMission + 1
+        G.talks = []
+        G.votes = []
+        G.results = []
+      },
       endIf: (G, ctx) => {
-        const currentMission = G.missions[G.currentMission]
+        let currentMission = G.missions[G.currentMission]
         if (currentMission.number === currentMission.result.length) {
-          // if (currentMission)
-          // console.log('揭示结果')
+          if (currentMission.result.indexOf(false) > -1) {
+            G.results.push(false)
+          } else {
+            G.results.push(true)
+          }
+
+          return { next: 'pick' }
         }
       },
-      next: 'pick'
     }
   },
 

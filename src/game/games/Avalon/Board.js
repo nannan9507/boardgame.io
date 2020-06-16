@@ -13,6 +13,20 @@ class Board extends React.Component {
         status: true,
         type: '',
       },
+      isMission: {
+        status: true,
+        type: ''
+      },
+      current: ''
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.G.currentStage !== this.props.G.currentStage) {
+      const text = this.getStage(this.props.G.currentStage)
+      this.setState({
+        current: text
+      })
     }
   }
 
@@ -63,8 +77,10 @@ class Board extends React.Component {
 
   vote(result) {
     this.setState({
-      isVote: false,
-      type: result,
+      isVote: {
+        status: false,
+        type: result,
+      },
     })
 
     this.props.moves.voteTo({
@@ -74,6 +90,12 @@ class Board extends React.Component {
   }
 
   mission(result) {
+    this.setState({
+      isMission: {
+        status: false,
+        type: result,
+      },
+    })
     this.props.moves.missionTo(result)
   }
 
@@ -105,13 +127,13 @@ class Board extends React.Component {
     const commonBoard = (
       <div className="common-board">
         {lines}
-        <div className="center">{this.getStage(this.props.G.currentStage)}</div>
+        <div className="center">{this.state.current}</div>
       </div>
     )
 
     const filter2User = () => {
       let list = []
-      const filter_list = this.props.G.users.filter((user) => {
+      const filter_list = this.props.G.users.filter(user => {
         if (user.active) {
           list.push(`【${user.index}】`)
           if (user.index === Number(this.props.playerID)) {
@@ -220,7 +242,7 @@ class Board extends React.Component {
         <div className="tips">
           <h3>任务</h3>
           {showbox}
-          {this.state.isVote.status && isCurrent && (
+          {this.state.isMission.status && isCurrent && (
             <div className="center">
               <Button
                 className="btn"
