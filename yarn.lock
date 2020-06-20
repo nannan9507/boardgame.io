@@ -8387,6 +8387,11 @@ normalize.css@^7.0.0:
   resolved "https://registry.npm.taobao.org/normalize.css/download/normalize.css-7.0.0.tgz#abfb1dd82470674e0322b53ceb1aaf412938e4bf"
   integrity sha1-q/sd2CRwZ04DIrU86xqvQSk45L8=
 
+normalize.css@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.npm.taobao.org/normalize.css/download/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
+  integrity sha1-m5iiCHOLnMJjTKrLxC0THJdIe/M=
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -12119,6 +12124,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript@^3.9.5:
+  version "3.9.5"
+  resolved "https://registry.npm.taobao.org/typescript/download/typescript-3.9.5.tgz?cache=0&sync_timestamp=1592203629411&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftypescript%2Fdownload%2Ftypescript-3.9.5.tgz#586f0dba300cde8be52dd1ac4f7e1009c1b13f36"
+  integrity sha1-WG8NujAM3ovlLdGsT34QCcGxPzY=
 
 ua-parser-js@^0.7.18:
   version "0.7.21"

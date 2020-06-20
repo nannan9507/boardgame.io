@@ -1,0 +1,26 @@
+.board {
+  width: 100vw;
+  height: 100vh;
+}
+
+// pc端
+@media screen and (min-width: 415px) {
+  body {
+    background-color: lightblue;
+    .line {
+      display: flex;
+      .cell {
+        border-top: 1px solid blue;
+        border-left: 1px solid blue;
+        width: 100px;
+        height: 60px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 414px) {
+  body {
+    background-color: red;
+  }
+}

@@ -19,14 +19,18 @@ class Board extends React.Component {
       },
       current: ''
     }
+
+    this.props.G.users[0].active = true
+    console.log(this.state.choice)
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.G.currentStage !== this.props.G.currentStage) {
       const text = this.getStage(this.props.G.currentStage)
+      const choice = [...this.props.G.users]
       this.setState({
         current: text,
-        choice: []
+        choice
       })
     }
   }
@@ -51,8 +55,11 @@ class Board extends React.Component {
       this.state.choice.push(user)
     }
 
-    // console.log(this.state.choice)
-    // user.active = !user.active
+    const list = this.state.choice.filter(choiceOne => choiceOne.index === user.index)
+
+    if (list && list.length) {
+      list[0].active = !list[0].active
+    }
 
     this.setState({
       choice: this.state.choice,
